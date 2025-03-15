@@ -85,21 +85,21 @@ app.post('/clerkWebhook', async (req, res) => {
         const event = req.body
         if(event.type === "user.created"){
             const newUser = await User({
-                uname : event.username,
-                clerkId : event.clerkId
+                uname : event.data.username,
+                clerkId : event.data.id
             }).save()
             console.log(newUser)
         }
         else if(event.type === "user deleted"){
-           await User.findOneAndDelete({uname})
+           await User.findOneAndDelete({clerkId : event.data.id})
         }
         else if(event.type === "user updated"){
-            await User.findOneAndUpdate({uname})
+            await User.findOneAndUpdate({clerkId : event.data.id},{$set : {uname : event.data.username}},{new : true})
         }
         res.send('success')
         }
-    catch (error) {
-        console.log(error)
+    catch (err) {
+        console.log(err)
         res.send('failed')
     }
 });
