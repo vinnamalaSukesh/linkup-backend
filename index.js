@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
 
 mongoose.connect(process.env.MONGODB_URI)
 .then('DB connected')
-.catch((err) => console.log(error))
+.catch((err) => console.log(err))
 
 const user = new Schema({
     clerkId: { type: String, required: true, unique: true },
