@@ -3,7 +3,8 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import http from 'http';
 import 'dotenv/config';
-import mongoose, { models, Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
+const {models,Schema,model} = mongoose
 
 const app = express();
 const server = http.createServer(app);
