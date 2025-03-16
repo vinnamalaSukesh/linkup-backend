@@ -89,7 +89,7 @@ app.post('/clerkWebhook', async (req, res) => {
                 clerkId : event.data.id
             }).save()
         }
-        else if(event.type === "user deleted"){
+        else if(event.type === "user.deleted"){
             const existingUser = await User.findOne({ clerkId: event.data.id });
             if (existingUser) {
                 const deletedUser = await User.findOneAndDelete({ clerkId: event.data.id });
