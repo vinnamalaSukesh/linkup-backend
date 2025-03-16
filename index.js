@@ -25,8 +25,8 @@ io.on('connection', (socket) => {
 });
 
 mongoose.connect(process.env.MONGODB_URI)
-.then('DB connected')
-.catch((err) => console.log(err))
+    .then(() => console.log('DB connected'))
+    .catch((err) => console.log('DB connection error:', err));
 
 const user = new Schema({
     clerkId: { type: String, required: true, unique: true },
@@ -94,7 +94,21 @@ app.post('/clerkWebhook', async (req, res) => {
            await User.findOneAndDelete({clerkId : event.data.id})
         }
         else if(event.type === "user updated"){
-            await User.findOneAndUpdate({clerkId : event.data.id},{$set : {uname : event.data.username}},{new : true})
+            const existingUser = await User.findOne({ uname: event.data.username });
+
+            if (existingUser && existingUser.clerkId !== event.data.id) {
+                return res.status(400).send("Username already exists!");
+            }
+
+            const updatedUser = await User.findOneAndUpdate(
+                { clerkId: event.data.id },
+                { $set: { uname: event.data.username } },
+                { new: true }
+            );
+
+            if (!updatedUser) return res.status(404).send("User not found");
+
+            console.log("User updated:", updatedUser);
         }
         res.send('success')
         }
