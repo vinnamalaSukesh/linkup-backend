@@ -92,7 +92,8 @@ app.post('/clerkWebhook', async (req, res) => {
         }
         else if(event.type === "user deleted"){
            const deleteduser = await User.findOneAndDelete({clerkId : event.data.id})
-           console.log(deleteduser)
+           console.log(deleteduser,"In deletion")
+           console.log(event.data.id)
         }
     }
     catch (err) {
