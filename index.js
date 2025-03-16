@@ -29,8 +29,8 @@ mongoose.connect(process.env.MONGODB_URI)
     .catch((err) => console.log('DB connection error:', err));
 
 const user = new Schema({
-    clerkId: { type: String, required: true, unique: true },
-    uname: { type: String, required: true, unique: true },
+    clerkId: { type: String, required: true},
+    uname: { type: String, required: true},
 
     friends: {
         count: { type: Number, default: 0 },
