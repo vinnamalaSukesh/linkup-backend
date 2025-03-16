@@ -91,27 +91,10 @@ app.post('/clerkWebhook', async (req, res) => {
             console.log(newUser)
         }
         else if(event.type === "user deleted"){
-           await User.findOneAndDelete({clerkId : event.data.id})
+           const deleteduser = await User.findOneAndDelete({clerkId : event.data.id})
+           console.log(deleteduser)
         }
-        else if(event.type === "user updated"){
-            const existingUser = await User.findOne({ uname: event.data.username });
-
-            if (existingUser && existingUser.clerkId !== event.data.id) {
-                return res.status(400).send("Username already exists!");
-            }
-
-            const updatedUser = await User.findOneAndUpdate(
-                { clerkId: event.data.id },
-                { $set: { uname: event.data.username } },
-                { new: true }
-            );
-
-            if (!updatedUser) return res.status(404).send("User not found");
-
-            console.log("User updated:", updatedUser);
-        }
-        res.send('success')
-        }
+    }
     catch (err) {
         console.log(err)
         res.send('failed')
